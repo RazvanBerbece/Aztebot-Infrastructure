@@ -3,7 +3,7 @@ variable "firewall_name" {
   type        = string
 }
 
-variable "network_id" {
-  description = "ID of the network to attach the firewall rule"
+variable "network_name" {
+  description = "Name of the network to which to attach the firewall rule"
   type        = string
 }

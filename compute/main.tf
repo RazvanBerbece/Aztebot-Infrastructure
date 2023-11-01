@@ -1,12 +1,12 @@
 resource "google_compute_instance" "default" {
   name         = var.instance_name
-  machine_type = "f1-micro"
-  zone         = "europe-west2-c"
+  machine_type = var.machine_type
+  zone         = var.machine_zone
   tags         = ["ssh"]
 
   boot_disk {
     initialize_params {
-      image = "debian-cloud/debian-11"
+      image = var.machine_image
     }
   }
 
@@ -14,7 +14,7 @@ resource "google_compute_instance" "default" {
   metadata_startup_script = "sudo apt-get update; sudo apt-get install -yq build-essential"
 
   network_interface {
-    subnetwork = var.subnetwork_id
+    subnetwork = var.subnet_id
   }
 
 }
