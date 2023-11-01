@@ -22,7 +22,7 @@ jobs:
       - name: Setup Environment
         run: |
           mkdir keys
-          echo ${{ secrets.GC_SERVICE_ACCOUNT }} >> keys/gcloud_service_account.json
+          echo "${{ secrets.GC_SERVICE_ACCOUNT }}" >> keys/gcloud_service_account.json
 
       # Install Terraform & Terraform Cloud on the job woker
       - name: Install Terraform
