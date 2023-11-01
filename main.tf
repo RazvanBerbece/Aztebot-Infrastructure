@@ -20,3 +20,10 @@ module "firewall" {
   firewall_name = "aztebot-vm-allow-ssh"
   network_name  = module.networks.network_name
 }
+
+module "artifact-registry" {
+  source         = "./artifact-registry"
+  ar_location    = "europe-west2"
+  ar_id          = "aztebot-docker-ar"
+  ar_description = "Docker container registry for the Aztebot service"
+}
