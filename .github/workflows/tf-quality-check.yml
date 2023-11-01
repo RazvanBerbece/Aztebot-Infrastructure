@@ -22,7 +22,7 @@ jobs:
       - name: Setup Environment
         run: |
           mkdir keys
-          echo "${{ secrets.GC_SERVICE_ACCOUNT }}" >> keys/gcloud_service_account.json
+          echo "${{ secrets.GC_SERVICE_ACCOUNT_BASE64 }}" | base64 --decode | jq > gcp-gcloud_service_account.json
 
       # Install Terraform & Terraform Cloud on the job woker
       - name: Install Terraform
@@ -60,7 +60,7 @@ jobs:
       
       # On PR events, comment on the PR with the terraform step statuses
       # The always() allows this step to run regardless of whether the steps above failed, as we want to see which stage failed
-      - name: Update Pull Request With Terraform Quality Step Outputs
+      - name: Update Pull Request with Terraform quality step outputs
         uses: actions/github-script@0.9.0
         if: github.event_name == 'pull_request' && always()
         with:
