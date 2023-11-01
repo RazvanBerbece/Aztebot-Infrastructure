@@ -49,6 +49,9 @@ jobs:
         id: validate
         run: terraform validate -no-color
 
+      - name: Run 'terraform show'
+        run: terraform show
+
       # Generate Terraform plan on PR events.
       # main.tf also defines a Cloud block, so this step triggers a remote plan run in Terraform Cloud 
       # When the PR is merged, 'terraform apply' will run
@@ -60,7 +63,7 @@ jobs:
       
       # On PR events, comment on the PR with the terraform step statuses
       # The always() allows this step to run regardless of whether the steps above failed, as we want to see which stage failed
-      - name: Update Pull Request with Terraform quality step outputs
+      - name: Update PR with Terraform quality step outputs
         uses: actions/github-script@0.9.0
         if: github.event_name == 'pull_request' && always()
         with:
