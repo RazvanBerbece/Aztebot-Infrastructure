@@ -28,6 +28,15 @@ resource "google_service_account_iam_binding" "cd-account-iam" {
   ]
 }
 
+# This IAM binding is used for deploying the containers from the app repository
+resource "google_project_iam_binding" "cd-gke-iam" {
+  project = var.project_id
+  role    = "roles/container.admin"
+  members = [
+    "serviceAccount:${google_service_account.github-service-account.email}",
+  ]
+}
+
 module "gh_oidc" {
   source            = "terraform-google-modules/github-actions-runners/google//modules/gh-oidc"
   version           = "v3.1.1"
