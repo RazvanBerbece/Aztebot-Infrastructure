@@ -4,19 +4,6 @@ module "auth" {
   ci_service_account_display_name = "Service Account - cd-service-account"
 }
 
-module "networks" {
-  source        = "./networks"
-  network_name  = "aztebot-network"
-  subnet_name   = "aztebot-subnet"
-  subnet_region = "europe-west2"
-}
-
-module "firewall" {
-  source        = "./firewall"
-  firewall_name = "aztebot-vm-allow-ssh"
-  network_name  = module.networks.network_name
-}
-
 module "artifact-registry" {
   source                   = "./artifact-registry"
   ar_service_account_email = module.auth.cd_service_account_email
