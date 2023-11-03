@@ -12,3 +12,8 @@ variable "ar_location" {
   description = "Google Cloud Artifact Registry location in the right format"
   type        = string
 }
+
+variable "ar_service_account_email" {
+  description = "Google Cloud Artifact Registry service account email"
+  type        = string
+}

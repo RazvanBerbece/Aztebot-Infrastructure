@@ -1,7 +1,7 @@
 module "auth" {
   source                          = "./auth"
   project_id                      = "aztebot-403621"
-  ci_service_account_display_name = "Service Account - github-svc"
+  ci_service_account_display_name = "Service Account - cd-service-account"
 }
 
 module "networks" {
@@ -28,8 +28,13 @@ module "firewall" {
 }
 
 module "artifact-registry" {
-  source         = "./artifact-registry"
-  ar_location    = "europe-west2"
-  ar_id          = "aztebot-docker-ar"
-  ar_description = "Docker container registry for the Aztebot service"
+  source                   = "./artifact-registry"
+  ar_service_account_email = module.auth.cd_service_account_email
+  ar_location              = "europe-west2"
+  ar_id                    = "aztebot-docker-ar"
+  ar_description           = "Docker container registry for the Aztebot service"
+
+  depends_on = [
+    module.auth
+  ]
 }

@@ -1,7 +1,7 @@
 ###### Auth is done via a Workload Identity Pool. 
 ###### The identity pool contains an identity pool *provider* which is issued by https://token.actions.githubusercontent.com in order to authorise connections.
 
-###### RESOURCES TO ALLOW CI (CURRENTLY GH ACTIONS) TO CONNECT TO GCLOUD USING WIP
+###### RESOURCES TO ALLOW CD (CURRENTLY GH ACTIONS) TO CONNECT TO GCLOUD USING WIP
 resource "google_project_service" "wif_api" {
   for_each = toset([
     "iam.googleapis.com",
@@ -20,7 +20,7 @@ resource "google_service_account" "github-service-account" {
   display_name = var.ci_service_account_display_name
 }
 
-resource "google_service_account_iam_binding" "ci-account-iam" {
+resource "google_service_account_iam_binding" "cd-account-iam" {
   service_account_id = google_service_account.github-service-account.name
   role               = "roles/owner" # TODO: Use least privilege here instead
   members = [
@@ -32,9 +32,9 @@ module "gh_oidc" {
   source            = "terraform-google-modules/github-actions-runners/google//modules/gh-oidc"
   version           = "v3.1.1"
   project_id        = var.project_id
-  pool_id           = "ci-identity-pool"
-  pool_display_name = "CI Identity Pool"
-  provider_id       = "ci-provider-aztebot"
+  pool_id           = "cd-identity-pool"
+  pool_display_name = "CD Identity Pool"
+  provider_id       = "cd-provider-aztebot"
   sa_mapping = {
     (google_service_account.github-service-account.account_id) = {
       sa_name   = google_service_account.github-service-account.name
