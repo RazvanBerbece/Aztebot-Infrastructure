@@ -1,3 +1,9 @@
+module "auth" {
+  source                          = "./auth"
+  project_id                      = "aztebot-403621"
+  ci_service_account_display_name = "Service Account - github-svc"
+}
+
 module "networks" {
   source        = "./networks"
   network_name  = "aztebot-network"
