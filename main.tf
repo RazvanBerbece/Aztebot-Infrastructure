@@ -11,16 +11,6 @@ module "networks" {
   subnet_region = "europe-west2"
 }
 
-module "compute" {
-  source           = "./compute"
-  instance_name    = "aztebot-vm"
-  subnet_id        = module.networks.subnet_id
-  machine_type     = "f1-micro"
-  machine_zone     = "europe-west2-c"
-  machine_image    = "debian-cloud/debian-11"
-  account_username = "antonio99.dev"
-}
-
 module "firewall" {
   source        = "./firewall"
   firewall_name = "aztebot-vm-allow-ssh"
@@ -38,3 +28,18 @@ module "artifact-registry" {
     module.auth
   ]
 }
+
+module "gke_cluster" {
+  source                          = "./gke"
+  cluster_name                    = "aztebot-cluster"
+  cluster_location_zone           = "europe-west2-c"
+  node_pool_name                  = "aztebot-node-pool"
+  node_pool_count                 = 1
+  node_pool_machine_type          = "e2-small"
+  node_pool_service_account_email = module.auth.cd_service_account_email
+
+  depends_on = [
+    module.auth
+  ]
+}
+
