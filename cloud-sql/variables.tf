@@ -17,3 +17,8 @@ variable "sql_database_tier" {
   description = "Tier for the SQL Cloud instance in Google Cloud"
   type        = string
 }
+
+variable "private_network_id" {
+  description = "ID of the private network that the SQL Cloud instance resides in"
+  type        = string
+}

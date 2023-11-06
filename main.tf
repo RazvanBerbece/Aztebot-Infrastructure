@@ -1,9 +1,17 @@
+module "apis" {
+  source = "./apis"
+}
+
 module "auth" {
   source = "./auth"
 
   project_id                           = "aztebot-403621"
   ci_service_account_display_name      = "CD Service Account - cd-service-account"
   bot_app_service_account_display_name = "App Service Account - bot-app-cloud-access"
+
+  depends_on = [
+    module.apis
+  ]
 }
 
 module "aztebot_network" {
@@ -13,6 +21,10 @@ module "aztebot_network" {
   aztebot_subnet_region               = "europe-west2"
   aztebot_subnet_container_cidr_range = "10.75.0.0/20"
   aztebot_subnet_service_cidr_range   = "10.8.0.0/14"
+
+  depends_on = [
+    module.apis
+  ]
 }
 
 module "artifact-registry" {
@@ -25,6 +37,20 @@ module "artifact-registry" {
 
   depends_on = [
     module.auth
+  ]
+}
+
+module "cloud_sql_instance" {
+  source = "./cloud-sql"
+
+  sql_database_name    = "aztebot-bot-db"
+  sql_database_version = "MYSQL_5_7"
+  sql_database_region  = "europe-west2"
+  sql_database_tier    = "db-f1-micro"
+  private_network_id   = module.aztebot_network.vpc_id
+
+  depends_on = [
+    module.aztebot_network
   ]
 }
 

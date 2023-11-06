@@ -20,3 +20,17 @@ resource "google_compute_subnetwork" "aztebot-subnet" {
     ip_cidr_range = var.aztebot_subnet_service_cidr_range
   }
 }
+
+resource "google_compute_global_address" "private_ip_address" {
+  name          = "${google_compute_network.vpc.name}-ip-address"
+  purpose       = "VPC_PEERING"
+  address_type  = "INTERNAL"
+  prefix_length = 16
+  network       = google_compute_network.vpc.name
+}
+
+resource "google_service_networking_connection" "private_vpc_connection" {
+  network                 = google_compute_network.vpc.name
+  service                 = "servicenetworking.googleapis.com"
+  reserved_peering_ranges = ["${google_compute_global_address.private_ip_address.name}"]
+}

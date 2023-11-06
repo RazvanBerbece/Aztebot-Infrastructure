@@ -2,18 +2,6 @@
 ###### The identity pool contains an identity pool *provider* which is issued by https://token.actions.githubusercontent.com in order to authorise connections.
 
 ###### RESOURCES TO ALLOW CD (CURRENTLY GH ACTIONS) TO CONNECT TO GCLOUD USING WIP
-resource "google_project_service" "wif_api" {
-  for_each = toset([
-    "iam.googleapis.com",
-    "cloudresourcemanager.googleapis.com",
-    "iamcredentials.googleapis.com",
-    "sts.googleapis.com",
-  ])
-
-  service            = each.value
-  disable_on_destroy = false
-}
-
 resource "google_service_account" "github-service-account" {
   project      = var.project_id
   account_id   = "gcp-github-access"
