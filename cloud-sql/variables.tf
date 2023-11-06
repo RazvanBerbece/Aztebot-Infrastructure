@@ -22,3 +22,22 @@ variable "private_network_id" {
   description = "ID of the private network that the SQL Cloud instance resides in"
   type        = string
 }
+
+variable "project_id" {
+  description = "Project ID"
+  type        = string
+}
+
+variable "SQL_USER_NAME" {
+  description = "SQL user name"
+  type        = string
+  sensitive   = true
+  default     = null
+}
+
+variable "SQL_USER_PASS" {
+  description = "SQL user password"
+  type        = string
+  sensitive   = true
+  default     = null
+}

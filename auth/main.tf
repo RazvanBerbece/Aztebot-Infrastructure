@@ -40,11 +40,4 @@ resource "google_project_iam_binding" "cd-gke-iam" {
   ]
 }
 
-###### RESOURCES TO ALLOW THE APP SERVICES TO CONNECT TO GCLOUD USING WIP
-resource "google_service_account" "bot-app-service-account" {
-  project      = var.project_id
-  account_id   = "bot-app-cloud-access"
-  display_name = var.bot_app_service_account_display_name
-}
-
-### IAM Bindings for App Services
+###### RESOURCES TO ALLOW THE APP SERVICES TO CONNECT TO GCLOUD

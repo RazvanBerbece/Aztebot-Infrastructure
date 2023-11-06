@@ -5,9 +5,8 @@ module "apis" {
 module "auth" {
   source = "./auth"
 
-  project_id                           = "aztebot-403621"
-  ci_service_account_display_name      = "CD Service Account - cd-service-account"
-  bot_app_service_account_display_name = "App Service Account - bot-app-cloud-access"
+  project_id                      = "aztebot-403621"
+  ci_service_account_display_name = "CD Service Account - cd-service-account"
 
   depends_on = [
     module.apis
@@ -48,6 +47,7 @@ module "cloud_sql_instance" {
   sql_database_region  = "europe-west2"
   sql_database_tier    = "db-f1-micro"
   private_network_id   = module.aztebot_network.vpc_id
+  project_id           = "aztebot-403621"
 
   depends_on = [
     module.aztebot_network
