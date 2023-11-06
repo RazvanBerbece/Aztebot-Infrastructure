@@ -1,11 +1,23 @@
 module "auth" {
-  source                          = "./auth"
-  project_id                      = "aztebot-403621"
-  ci_service_account_display_name = "Service Account - cd-service-account"
+  source = "./auth"
+
+  project_id                           = "aztebot-403621"
+  ci_service_account_display_name      = "CD Service Account - cd-service-account"
+  bot_app_service_account_display_name = "App Service Account - bot-app-cloud-access"
+}
+
+module "aztebot_network" {
+  source = "./networks"
+
+  aztebot_subnet_cidr_range           = "10.105.0.0/24"
+  aztebot_subnet_region               = "europe-west2"
+  aztebot_subnet_container_cidr_range = "10.75.0.0/20"
+  aztebot_subnet_service_cidr_range   = "10.8.0.0/14"
 }
 
 module "artifact-registry" {
-  source                   = "./artifact-registry"
+  source = "./artifact-registry"
+
   ar_service_account_email = module.auth.cd_service_account_email
   ar_location              = "europe-west2"
   ar_id                    = "aztebot-docker-ar"
@@ -17,13 +29,20 @@ module "artifact-registry" {
 }
 
 module "gke_cluster" {
-  source                          = "./gke"
+  source = "./gke"
+
   cluster_name                    = "aztebot-cluster"
   cluster_location_zone           = "europe-west2-c"
   node_pool_name                  = "aztebot-node-pool"
-  node_pool_count                 = 1
+  node_min_count                  = 1
+  node_max_count                  = 3
   node_pool_machine_type          = "e2-small"
   node_pool_service_account_email = module.auth.cd_service_account_email
+
+  vpc                                                = module.aztebot_network.vpc_name
+  aztebot_subnet                                     = module.aztebot_network.aztebot_subnet_name
+  aztebot_subnet_container_secondary_cidr_range_name = module.aztebot_network.aztebot_subnet_container_secondary_cidr_range_name
+  aztebot_subnet_services_secondary_cidr_range_name  = module.aztebot_network.aztebot_subnet_services_secondary_cidr_range_name
 
   depends_on = [
     module.auth

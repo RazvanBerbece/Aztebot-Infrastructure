@@ -20,23 +20,6 @@ resource "google_service_account" "github-service-account" {
   display_name = var.ci_service_account_display_name
 }
 
-resource "google_service_account_iam_binding" "cd-account-iam" {
-  service_account_id = google_service_account.github-service-account.name
-  role               = "roles/owner" # TODO: Use least privilege here instead
-  members = [
-    "serviceAccount:${google_service_account.github-service-account.email}",
-  ]
-}
-
-# This IAM binding is used for deploying the containers from the app repository
-resource "google_project_iam_binding" "cd-gke-iam" {
-  project = var.project_id
-  role    = "roles/container.admin"
-  members = [
-    "serviceAccount:${google_service_account.github-service-account.email}",
-  ]
-}
-
 module "gh_oidc" {
   source            = "terraform-google-modules/github-actions-runners/google//modules/gh-oidc"
   version           = "v3.1.1"
@@ -51,3 +34,29 @@ module "gh_oidc" {
     }
   }
 }
+
+### IAM Bindings for CD
+resource "google_service_account_iam_binding" "cd-account-iam" {
+  service_account_id = google_service_account.github-service-account.name
+  role               = "roles/owner" # TODO: Use least privilege here instead
+  members = [
+    "serviceAccount:${google_service_account.github-service-account.email}",
+  ]
+}
+resource "google_project_iam_binding" "cd-gke-iam" {
+  # This IAM binding is used for deploying the containers to AR from the app repository
+  project = var.project_id
+  role    = "roles/container.admin"
+  members = [
+    "serviceAccount:${google_service_account.github-service-account.email}",
+  ]
+}
+
+###### RESOURCES TO ALLOW THE APP SERVICES TO CONNECT TO GCLOUD USING WIP
+resource "google_service_account" "bot-app-service-account" {
+  project      = var.project_id
+  account_id   = "bot-app-cloud-access"
+  display_name = var.bot_app_service_account_display_name
+}
+
+### IAM Bindings for App Services

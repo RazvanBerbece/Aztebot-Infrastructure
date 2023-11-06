@@ -1,0 +1,22 @@
+resource "google_compute_network" "vpc" {
+  name                    = "aztebot-vpc" // var.aztebot_network_name
+  auto_create_subnetworks = false
+}
+
+# Subnet for cluster nodes
+resource "google_compute_subnetwork" "aztebot-subnet" {
+  name          = "${google_compute_network.vpc.name}-subnet"
+  ip_cidr_range = var.aztebot_subnet_cidr_range
+  region        = var.aztebot_subnet_region
+  network       = google_compute_network.vpc.name
+
+  secondary_ip_range {
+    range_name    = "container-range-1"
+    ip_cidr_range = var.aztebot_subnet_container_cidr_range
+  }
+
+  secondary_ip_range {
+    range_name    = "service-range-1"
+    ip_cidr_range = var.aztebot_subnet_service_cidr_range
+  }
+}

@@ -4,6 +4,11 @@ variable "project_id" {
 }
 
 variable "ci_service_account_display_name" {
-  description = "Display name for the service account associated with the workload identity pool"
+  description = "Display name for the CD service account associated with the workload identity pool"
+  type        = string
+}
+
+variable "bot_app_service_account_display_name" {
+  description = "Display name for the bot application composition service account associated with the workload identity pool"
   type        = string
 }

@@ -33,7 +33,7 @@ jobs:
       # Check that main.tf is consistently formatted
       - name: Run 'terraform fmt'
         id: fmt
-        run: terraform fmt -check
+        run: terraform fmt -check -recursive
       
       # Init the .terraform.lock.hcl (contains init state for providers, resources, etc.)
       # Initialised on the 'cete-api-default' workspace. TF will switch the workspace when needed (ie applying) 
