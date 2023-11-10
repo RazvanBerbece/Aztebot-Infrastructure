@@ -1,3 +1,7 @@
+locals {
+  authorized_cidr = ["92.31.107.120"]
+}
+
 resource "google_sql_database_instance" "main" {
   name             = var.sql_database_name
   database_version = var.sql_database_version
@@ -6,8 +10,18 @@ resource "google_sql_database_instance" "main" {
   settings {
     tier = var.sql_database_tier
     ip_configuration {
-      ipv4_enabled    = false
+      ipv4_enabled    = true
       private_network = var.private_network_id
+
+      dynamic "authorized_networks" {
+        for_each = local.authorized_cidr
+        iterator = authorized_cidr
+
+        content {
+          name  = "authorized_cidr-${authorized_cidr.key}"
+          value = authorized_cidr.value
+        }
+      }
     }
   }
 }

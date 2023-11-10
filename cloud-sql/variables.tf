@@ -32,12 +32,12 @@ variable "SQL_USER_NAME" {
   description = "SQL user name"
   type        = string
   sensitive   = true
-  default     = null
+  default     = "aztebotservice"
 }
 
 variable "SQL_USER_PASS" {
   description = "SQL user password"
   type        = string
   sensitive   = true
-  default     = null
+  default     = "51CcfnIzybe2F09ZPfe6lS3U0iZCeBUtjhP"
 }
