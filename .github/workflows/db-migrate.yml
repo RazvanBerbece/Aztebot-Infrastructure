@@ -26,8 +26,7 @@ jobs:
         working-directory: ./cloud-sql/migrations
         run: |
           touch .env
-          echo "DB_ROOT_CONNSTRING=${{ secrets.DB_ROOT_CONNSTRING }}" >> $GITHUB_ENV
-          echo "${{ secrets.DB_ROOT_CONNSTRING }}" >> .env
+          echo "${{ secrets.ENV }}" >> .env
 
       - name: Setup Go ${{ matrix.go-version }}
         uses: actions/setup-go@v4
@@ -41,12 +40,6 @@ jobs:
         working-directory: ./cloud-sql/migrations
         run: |
           go get .
-
-      - name: Login on GC SQL Proxy
-        uses: mattes/gce-cloudsql-proxy-action@v1
-        with:
-          creds: ${{ secrets.GC_SERVICE_ACCOUNT }}
-          instance: ${{ secrets.GC_DB_INSTANCE }}
 
       - name: Run migrations up
         working-directory: ./cloud-sql/migrations
