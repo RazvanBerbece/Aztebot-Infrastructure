@@ -42,6 +42,11 @@ jobs:
         run: |
           go get .
 
+      uses: mattes/gce-cloudsql-proxy-action@v1
+      with:
+        creds: ${{ secrets.GC_SERVICE_ACCOUNT }}
+        instance: ${{ secrets.GC_DB_INSTANCE }}
+
       - name: Run migrations up
         working-directory: ./cloud-sql/migrations
         run: go run main.go
