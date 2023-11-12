@@ -28,6 +28,10 @@ jobs:
           touch .env
           echo ${{ secrets.ENV_BASE64 }} | base64 --decode > .env
 
+          mkdir ../../keys
+          touch ../../keys/sa.json
+          echo ${{ secrets.GC_SERVICE_ACCOUNT_BASE64 }} | base64 --decode > ../../keys/sa.json
+
       - name: Setup Go ${{ matrix.go-version }}
         uses: actions/setup-go@v4
         with:

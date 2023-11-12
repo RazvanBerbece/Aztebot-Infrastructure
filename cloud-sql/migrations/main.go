@@ -51,6 +51,9 @@ func main() {
 			"cloudsql-mysql",
 			cloudDbConnString,
 		)
+		if err != nil {
+			log.Fatalf("Error occured while connecting to Cloud SQL Instance: %s", err)
+		}
 
 		n, err := migrate.Exec(db, "mysql", migrations, migrate.Up)
 		if err != nil {
