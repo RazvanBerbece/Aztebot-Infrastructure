@@ -38,8 +38,10 @@ jobs:
         run: go version
 
       - name: Install Go dependencies
+        working-directory: ./cloud-sql/migrations
         run: |
           go get .
 
       - name: Run migrations up
+        working-directory: ./cloud-sql/migrations
         run: go run main.go
