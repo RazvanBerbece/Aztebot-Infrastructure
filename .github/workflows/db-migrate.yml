@@ -39,7 +39,7 @@ jobs:
 
       - name: Install Go dependencies
         run: |
-          go mod download
+          go get .
 
       - name: Run migrations up
         run: go run main.go
