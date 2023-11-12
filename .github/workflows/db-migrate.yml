@@ -26,7 +26,7 @@ jobs:
         working-directory: ./cloud-sql/migrations
         run: |
           touch .env
-          echo "${{ secrets.ENV }}" >> .env
+          echo ${{ secrets.ENV_BASE64 }} | base64 --decode > .env
 
       - name: Setup Go ${{ matrix.go-version }}
         uses: actions/setup-go@v4

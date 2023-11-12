@@ -39,3 +39,4 @@ keys/
 .env
 .bashrc
 .prod.env
+.output.env
