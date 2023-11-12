@@ -1,0 +1,37 @@
+name: db-migrate
+
+on:
+  push:
+    branches: [ 'main' ]
+    paths:
+      - cloud-sql/migrations/**
+
+  workflow_dispatch:
+
+jobs:
+
+  migration:
+
+    name: Migrate Up
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - uses: actions/checkout@v2
+
+      - name: Setup environment
+        run: |
+          touch .env
+          echo "DB_ROOT_CONNSTRING=${{ secrets.DB_ROOT_CONNSTRING }}" >> $GITHUB_ENV
+          echo "${{ secrets.DB_ROOT_CONNSTRING }}" >> ./cloud-sql/migrations/.env
+
+      - name: Setup Go ${{ matrix.go-version }}
+        uses: actions/setup-go@v4
+        with:
+          go-version: ${{ matrix.go-version }}
+      
+      - name: Display Go version
+        run: go version
+
+      - name: Run migrations up
+        run: go run ./cloud-sql/migrations/main.go

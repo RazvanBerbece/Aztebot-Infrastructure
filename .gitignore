@@ -38,3 +38,4 @@ keys/
 .DS_Store
 .env
 .bashrc
+.prod.env
