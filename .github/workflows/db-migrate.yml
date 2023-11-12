@@ -23,10 +23,11 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Setup environment
+        working-directory: ./cloud-sql/migrations
         run: |
           touch .env
           echo "DB_ROOT_CONNSTRING=${{ secrets.DB_ROOT_CONNSTRING }}" >> $GITHUB_ENV
-          echo "${{ secrets.DB_ROOT_CONNSTRING }}" >> ./cloud-sql/migrations/.env
+          echo "${{ secrets.DB_ROOT_CONNSTRING }}" >> .env
 
       - name: Setup Go ${{ matrix.go-version }}
         uses: actions/setup-go@v4
@@ -36,5 +37,9 @@ jobs:
       - name: Display Go version
         run: go version
 
+      - name: Install Go dependencies
+        run: |
+          go mod download
+
       - name: Run migrations up
-        run: go run ./cloud-sql/migrations/main.go
+        run: go run main.go
