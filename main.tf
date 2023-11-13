@@ -42,13 +42,13 @@ module "artifact-registry" {
 module "cloud_sql_instance" {
   source = "./cloud-sql"
 
-  sql_database_name    = "aztebot-bot-db"
-  sql_database_version = "MYSQL_5_7"
-  sql_database_region  = "europe-west2"
-  sql_database_tier    = "db-f1-micro"
-  private_network_id   = module.aztebot_network.vpc_id
-  project_id           = "aztebot-403621"
-  db_manager_sa_email  = module.auth.sa_db_manager_email
+  sql_database_instance_name = "aztebot-bot-sql-cloud-instance"
+  sql_database_version       = "MYSQL_5_7"
+  sql_database_region        = "europe-west2"
+  sql_database_tier          = "db-f1-micro"
+  private_network_id         = module.aztebot_network.vpc_id
+  project_id                 = "aztebot-403621"
+  db_manager_sa_email        = module.auth.sa_db_manager_email
 
   depends_on = [
     module.aztebot_network

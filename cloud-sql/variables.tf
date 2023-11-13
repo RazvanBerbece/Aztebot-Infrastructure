@@ -1,4 +1,4 @@
-variable "sql_database_name" {
+variable "sql_database_instance_name" {
   description = "Name of the SQL Cloud instance in Google Cloud"
   type        = string
 }

@@ -3,7 +3,7 @@ locals {
 }
 
 resource "google_sql_database_instance" "main" {
-  name             = var.sql_database_name
+  name             = var.sql_database_instance_name
   database_version = var.sql_database_version
   region           = var.sql_database_region
 
