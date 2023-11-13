@@ -31,6 +31,11 @@ resource "google_sql_database_instance" "main" {
   }
 }
 
+resource "google_sql_database" "aztebot-bot-db" {
+  name     = "aztebot-bot-db"
+  instance = google_sql_database_instance.main.name
+}
+
 resource "google_sql_user" "sql_user" {
   name     = var.SQL_USER_NAME
   instance = google_sql_database_instance.main.name

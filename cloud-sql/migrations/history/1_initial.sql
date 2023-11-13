@@ -1,5 +1,4 @@
 -- +migrate Up
-CREATE DATABASE aztebot-bot-db;
 USE aztebot-bot-db; 
 
 CREATE TABLE IF NOT EXISTS Roles (
