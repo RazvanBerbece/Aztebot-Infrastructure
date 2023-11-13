@@ -7,6 +7,6 @@ provider "google" {
 }
 
 provider "google-beta" {
-  credentials = file("keys/gcloud_service_account.json")
+  credentials = file("keys/sa.json")
   project     = "aztebot-403621"
 }

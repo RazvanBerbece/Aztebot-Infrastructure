@@ -41,3 +41,15 @@ resource "google_project_iam_binding" "cd-gke-iam" {
 }
 
 ###### RESOURCES TO ALLOW THE APP SERVICES TO CONNECT TO GCLOUD
+resource "google_service_account" "database-manager-service-account" {
+  project      = var.project_id
+  account_id   = "sa-db-manager"
+  display_name = "Service Account - Database Manager"
+}
+resource "google_project_iam_binding" "cloudsql-db-iam" {
+  project = var.project_id
+  role    = "roles/cloudsql.admin"
+  members = [
+    "serviceAccount:${google_service_account.database-manager-service-account.email}",
+  ]
+}

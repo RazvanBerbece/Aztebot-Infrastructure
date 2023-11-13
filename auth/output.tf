@@ -9,3 +9,7 @@ output "cd_provider_pool_name" {
 output "cd_provider_provider_name" {
   value = module.gh_oidc.provider_name
 }
+
+output "sa_db_manager_email" {
+  value = google_service_account.database-manager-service-account.email
+}

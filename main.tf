@@ -48,6 +48,7 @@ module "cloud_sql_instance" {
   sql_database_tier    = "db-f1-micro"
   private_network_id   = module.aztebot_network.vpc_id
   project_id           = "aztebot-403621"
+  db_manager_sa_email  = module.auth.sa_db_manager_email
 
   depends_on = [
     module.aztebot_network

@@ -31,6 +31,8 @@ jobs:
           mkdir ../../keys
           touch ../../keys/sa.json
           echo ${{ secrets.GC_SERVICE_ACCOUNT_BASE64 }} | base64 --decode > ../../keys/sa.json
+          touch ../../keys/sa.db.json
+          echo ${{ secrets.GC_DB_MANAGER_SERVICE_ACCOUNT_BASE64 }} | base64 --decode > ../../keys/sa.db.json
 
       - name: Setup Go ${{ matrix.go-version }}
         uses: actions/setup-go@v4

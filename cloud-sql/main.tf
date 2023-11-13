@@ -23,6 +23,11 @@ resource "google_sql_database_instance" "main" {
         }
       }
     }
+
+    database_flags {
+      name  = "cloudsql_iam_authentication"
+      value = "on"
+    }
   }
 }
 
@@ -30,4 +35,10 @@ resource "google_sql_user" "sql_user" {
   name     = var.SQL_USER_NAME
   instance = google_sql_database_instance.main.name
   password = var.SQL_USER_PASS
+}
+
+resource "google_sql_user" "iam_db_manager_service_account_user" {
+  name     = var.db_manager_sa_email
+  instance = google_sql_database_instance.main.name
+  type     = "CLOUD_IAM_SERVICE_ACCOUNT"
 }

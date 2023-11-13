@@ -28,6 +28,11 @@ variable "project_id" {
   type        = string
 }
 
+variable "db_manager_sa_email" {
+  description = "SA DB Manager email address"
+  type        = string
+}
+
 variable "SQL_USER_NAME" {
   description = "SQL user name"
   type        = string
