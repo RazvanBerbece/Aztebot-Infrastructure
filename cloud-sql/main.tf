@@ -32,7 +32,7 @@ resource "google_sql_database_instance" "main" {
 }
 
 resource "google_sql_database" "aztebot-bot-db" {
-  name     = "aztebot-bot-db"
+  name     = "aztebotBotDb"
   instance = google_sql_database_instance.main.name
 }
 

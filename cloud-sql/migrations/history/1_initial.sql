@@ -1,5 +1,5 @@
 -- +migrate Up
-USE aztebot-bot-db; 
+USE aztebotBotDb; 
 
 CREATE TABLE IF NOT EXISTS Roles (
   id                    INT AUTO_INCREMENT NOT NULL,
