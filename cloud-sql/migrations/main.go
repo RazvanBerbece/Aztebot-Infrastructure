@@ -40,7 +40,7 @@ func main() {
 		fmt.Printf("Applied %d migrations to local database!\n", n)
 	} else {
 		// Running migration in the Google Cloud SQL instance -- use proxy
-		cleanup, err := mysql.RegisterDriver("cloudsql-mysql", cloudsqlconn.WithIAMAuthN())
+		cleanup, err := mysql.RegisterDriver("cloudsql-mysql", cloudsqlconn.WithCredentialsFile("../../keys/sa.db.json"))
 		if err != nil {
 			log.Fatalf("Error occured while registering driver for GC SQL: %s", err)
 		}
