@@ -17,6 +17,7 @@ import (
 func main() {
 
 	godotenv.Load()
+
 	dbConnString := os.Getenv("DB_ROOT_CONNSTRING")
 	cloudDbConnString := os.Getenv("DB_ROOT_CLOUDSQL_CONNSTRING")
 	env := os.Getenv("ENVIRONMENT")
