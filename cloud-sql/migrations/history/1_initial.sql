@@ -1,6 +1,9 @@
 -- +migrate Up
 USE aztebotBotDb;
 
+-- Update the character set and collation for the database
+ALTER DATABASE aztebotBotDb CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
+
 CREATE TABLE IF NOT EXISTS Roles (
   id                    INT AUTO_INCREMENT NOT NULL,
   roleName              VARCHAR(255) NOT NULL,
