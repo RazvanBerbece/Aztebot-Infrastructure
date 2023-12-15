@@ -1,5 +1,5 @@
 locals {
-  authorized_cidr = ["80.44.153.116"]
+  authorized_cidr = ["80.47.87.49"]
 }
 
 ### SQL Cloud Instance and SQL Users
@@ -15,6 +15,7 @@ resource "google_sql_database_instance" "main" {
       ipv4_enabled    = true
       private_network = var.private_network_id
 
+      // Allow these external networks to connect to the DB
       dynamic "authorized_networks" {
         for_each = local.authorized_cidr
         iterator = authorized_cidr

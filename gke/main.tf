@@ -11,6 +11,10 @@ resource "google_container_cluster" "primary" {
     cluster_secondary_range_name  = var.aztebot_subnet_container_secondary_cidr_range_name
     services_secondary_range_name = var.aztebot_subnet_services_secondary_cidr_range_name
   }
+
+  monitoring_config {
+    enable_components = [ "SYSTEM_COMPONENTS", "APISERVER", "CONTROLLER_MANAGER", "SCHEDULER" ]
+  }
 }
 
 resource "google_container_node_pool" "primary_preemptible_nodes" {
