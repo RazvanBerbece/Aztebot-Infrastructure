@@ -62,7 +62,7 @@ module "gke_cluster" {
   cluster_location_zone           = "europe-west2-c"
   node_pool_name                  = "aztebot-node-pool"
   node_min_count                  = 1
-  node_max_count                  = 3
+  node_max_count                  = 1
   node_pool_machine_type          = "e2-small"
   node_pool_service_account_email = module.auth.cd_service_account_email
 

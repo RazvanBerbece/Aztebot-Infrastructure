@@ -11,16 +11,13 @@ resource "google_container_cluster" "primary" {
     cluster_secondary_range_name  = var.aztebot_subnet_container_secondary_cidr_range_name
     services_secondary_range_name = var.aztebot_subnet_services_secondary_cidr_range_name
   }
-
-  monitoring_config {
-    enable_components = [ "SYSTEM_COMPONENTS", "APISERVER", "CONTROLLER_MANAGER", "SCHEDULER" ]
-  }
 }
 
 resource "google_container_node_pool" "primary_preemptible_nodes" {
   name     = var.node_pool_name
   location = google_container_cluster.primary.location
   cluster  = google_container_cluster.primary.name
+  node_count = var.node_min_count
 
   node_config {
     preemptible  = true
@@ -37,10 +34,10 @@ resource "google_container_node_pool" "primary_preemptible_nodes" {
     ]
   }
 
-  autoscaling {
-    min_node_count = var.node_min_count
-    max_node_count = var.node_max_count
-  }
+  # autoscaling {
+  #   min_node_count = var.node_min_count
+  #   max_node_count = var.node_max_count
+  # }
 
   management {
     auto_repair  = true
