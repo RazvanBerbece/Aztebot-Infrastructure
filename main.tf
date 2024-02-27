@@ -2,6 +2,10 @@ module "apis" {
   source = "./apis"
 }
 
+module "storage" {
+  source = "./storage"
+}
+
 module "auth" {
   source = "./auth"
 

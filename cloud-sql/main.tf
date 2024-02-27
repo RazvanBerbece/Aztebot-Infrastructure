@@ -31,6 +31,16 @@ resource "google_sql_database_instance" "main" {
       name  = "cloudsql_iam_authentication"
       value = "on"
     }
+
+    backup_configuration {
+      enabled    = true
+      location   = var.sql_database_region
+      start_time = "02:00"
+
+      backup_retention_settings {
+        retained_backups = 1
+      }
+    }
   }
 }
 
