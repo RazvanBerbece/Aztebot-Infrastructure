@@ -11,12 +11,16 @@ resource "google_container_cluster" "primary" {
     cluster_secondary_range_name  = var.aztebot_subnet_container_secondary_cidr_range_name
     services_secondary_range_name = var.aztebot_subnet_services_secondary_cidr_range_name
   }
+
+  release_channel {
+    channel = "STABLE"
+  }
 }
 
 resource "google_container_node_pool" "primary_preemptible_nodes" {
-  name     = var.node_pool_name
-  location = google_container_cluster.primary.location
-  cluster  = google_container_cluster.primary.name
+  name       = var.node_pool_name
+  location   = google_container_cluster.primary.location
+  cluster    = google_container_cluster.primary.name
   node_count = var.node_min_count
 
   node_config {
