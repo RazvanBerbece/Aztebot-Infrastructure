@@ -26,11 +26,15 @@ jobs:
       - name: Setup Environment
         run: |
           mkdir keys
-          echo "${{ secrets.GC_SERVICE_ACCOUNT_BASE64 }}" | base64 --decode | jq > keys/gcloud_service_account.json
+          echo "${{ secrets.GC_SERVICE_ACCOUNT_BASE64 }}" | base64 --decode | jq > keys/sa.json
 
       # Install Terraform & Terraform Cloud on the job woker
       - name: Install Terraform
         uses: hashicorp/setup-terraform@v3
+
+      - name: Run 'terraform init'
+        id: fmt
+        run: terraform init
       
       # Check that main.tf is consistently formatted
       - name: Run 'terraform fmt'
