@@ -1,0 +1,60 @@
+name: tf-deploy
+
+on:
+  pull_request:
+    branches: [ '**' ]
+  push:
+    branches: [ 'main' ]
+
+  workflow_dispatch:
+
+env:
+  TF_IN_AUTOMATION: "1"
+  GOOGLE_APPLICATION_CREDENTIALS: "./keys/sa.json"
+
+jobs:
+
+  continuous-integration:
+    uses: ./.github/workflows/tf-quality-check.yml
+    secrets: inherit
+
+  continuous-deployment:
+    environment: production
+    needs: [continuous-integration]
+    runs-on: ubuntu-latest
+    if: needs.continuous-integration.result == 'success'
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Generate next release number
+        id: tag_version
+        uses: mathieudutour/github-tag-action@v6.1
+        with:
+          github_token: ${{ secrets.GH_TOKEN }}
+          default_bump: major
+          dry_run: true
+      
+      - name: Setup Environment
+        run: |
+          mkdir keys
+          echo "${{ secrets.GC_SERVICE_ACCOUNT_BASE64 }}" | base64 --decode | jq > keys/sa.json
+      
+      - name: Install Terraform
+        uses: hashicorp/setup-terraform@v3
+        
+      - name: Run 'terraform init'
+        run: |
+          terraform init -input=false -upgrade
+      
+      - name: Run 'terraform apply'
+        run: |
+          terraform apply -input=false -auto-approve
+      
+      - name: Create GitHub release
+        uses: ncipollo/release-action@v1
+        with:
+          token: ${{ secrets.GH_TOKEN }}
+          tag: ${{ steps.tag_version.outputs.new_tag }}
+          name: Release ${{ steps.tag_version.outputs.new_tag }}
+          body: ${{ steps.tag_version.outputs.changelog }}

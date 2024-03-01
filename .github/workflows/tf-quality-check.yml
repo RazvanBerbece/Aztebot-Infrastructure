@@ -2,10 +2,7 @@ name: tf-quality-check
 
 on:
   pull_request:
-    branches: [ '**' ]
-  push:
-    branches: [ 'main' ]
-
+  workflow_call:
   workflow_dispatch:
 
 env:
@@ -14,9 +11,7 @@ env:
 
 jobs:
 
-  terraform:
-
-    name: Terraform Quality
+  validate:
     runs-on: ubuntu-latest
 
     steps:
