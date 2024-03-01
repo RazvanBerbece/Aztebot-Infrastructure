@@ -8,6 +8,10 @@ on:
 
   workflow_dispatch:
 
+env:
+  TF_IN_AUTOMATION: "1"
+  SP_PATH: "./keys/sa.json"
+
 jobs:
 
   terraform:
@@ -26,9 +30,7 @@ jobs:
 
       # Install Terraform & Terraform Cloud on the job woker
       - name: Install Terraform
-        uses: hashicorp/setup-terraform@v1
-        with:
-          terraform_version: 1.1.6
+        uses: hashicorp/setup-terraform@v3
       
       # Check that main.tf is consistently formatted
       - name: Run 'terraform fmt'
@@ -39,8 +41,6 @@ jobs:
       # Initialised on the 'cete-api-default' workspace. TF will switch the workspace when needed (ie applying) 
       - name: Run 'terraform init'
         id: init
-        env:
-          TF_WORKSPACE: cete-api-default
         run: |
           terraform init -upgrade
       
@@ -49,9 +49,6 @@ jobs:
         id: validate
         run: terraform validate -no-color
 
-      - name: Run 'terraform show'
-        run: terraform show
-
       # Generate Terraform plan on PR events.
       # main.tf also defines a Cloud block, so this step triggers a remote plan run in Terraform Cloud 
       # When the PR is merged, 'terraform apply' will run
@@ -59,7 +56,7 @@ jobs:
       - name: Run 'terraform plan'
         id: planStep
         run: |
-          terraform plan
+          terraform plan -input=false
       
       # On PR events, comment on the PR with the terraform step statuses
       # The always() allows this step to run regardless of whether the steps above failed, as we want to see which stage failed
