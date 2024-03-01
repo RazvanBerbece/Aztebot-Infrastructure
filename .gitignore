@@ -40,3 +40,4 @@ keys/
 .bashrc
 .prod.env
 .output.env
+scripts/export_sp.sh

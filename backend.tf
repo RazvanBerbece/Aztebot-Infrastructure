@@ -1,6 +1,6 @@
-# terraform {
-#   backend "gcs" {
-#     bucket  = "bucket-tfstate-aztebot"
-#     prefix  = "terraform/state"
-#   }
-# }
+terraform {
+  backend "gcs" {
+    bucket  = "bucket-tfstate-aztebot"
+    prefix  = "terraform/state"
+  }
+}
