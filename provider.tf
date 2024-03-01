@@ -5,5 +5,5 @@ provider "google" {
 }
 
 provider "google-beta" {
-  project     = "aztebot-403621"
+  project = "aztebot-403621"
 }
