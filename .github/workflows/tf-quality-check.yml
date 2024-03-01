@@ -32,10 +32,6 @@ jobs:
       - name: Install Terraform
         uses: hashicorp/setup-terraform@v3
 
-      - name: Run 'terraform init'
-        id: fmt
-        run: terraform init
-      
       # Check that main.tf is consistently formatted
       - name: Run 'terraform fmt'
         id: fmt
