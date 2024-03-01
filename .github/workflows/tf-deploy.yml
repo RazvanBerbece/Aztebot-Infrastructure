@@ -1,10 +1,14 @@
 name: tf-deploy
 
 on:
-  pull_request:
-    branches: [ '**' ]
   push:
     branches: [ 'main' ]
+    paths-ignore:
+      - '.github/**'
+      - 'docs/**'
+      - 'README.md'
+      - '.gitignore'
+      - 'cloud-sql/migrations/**'
 
   workflow_dispatch:
 
