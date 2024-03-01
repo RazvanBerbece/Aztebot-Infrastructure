@@ -10,7 +10,7 @@ on:
 
 env:
   TF_IN_AUTOMATION: "1"
-  SP_PATH: "./keys/sa.json"
+  GOOGLE_APPLICATION_CREDENTIALS: "./keys/sa.json"
 
 jobs:
 
