@@ -1,5 +1,5 @@
 locals {
-  authorized_cidr = ["86.122.24.86"]
+  authorized_cidr = ["89.243.218.21"]
 }
 
 ### SQL Cloud Instance and SQL Users
