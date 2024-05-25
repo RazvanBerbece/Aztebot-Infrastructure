@@ -17,7 +17,7 @@
 dry_run=$1 # 0=false (submit deletion requests), 1=true (don't perform any deletions)
 
 # Variables
-image_limit_per_service=2
+image_limit_per_service=3
 
 previous_image_name=""
 current_image_name=""
