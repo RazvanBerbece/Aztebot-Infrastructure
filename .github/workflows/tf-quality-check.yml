@@ -8,6 +8,7 @@ on:
       - 'README.md'
       - '.gitignore'
       - 'cloud-sql/migrations/**'
+      - 'scripts/**'
   workflow_call:
 
 env:
