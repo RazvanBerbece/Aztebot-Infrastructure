@@ -1,3 +1,5 @@
+#!/bin/bash
+
 #
 # Shared Script - GCP Artifact Registry Docker Image Cleaner
 #
@@ -22,6 +24,11 @@ current_image_name=""
 current_image_count=0
 
 deleted_count=0
+
+if [[ $# -eq 0 ]] ; then
+    echo "No arguments provided. Using default values (dry_run: true)."
+    dry_run=1
+fi
 
 # Announce purpose of run (dry-run or actual run)
 if (( dry_run == 1 )); then
