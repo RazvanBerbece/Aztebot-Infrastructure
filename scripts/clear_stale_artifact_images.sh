@@ -76,7 +76,7 @@ while read line; do
                 image_id="$current_image_name@$digest"
                 # Only send delete requests if NOT in a dry-run
                 if (( dry_run == 0 )); then
-                    res=$(gcloud artifacts docker images delete europe-west2-docker.pkg.dev/aztebot-403621/aztebot-docker-ar/$image_id --async --quiet)
+                    res=$(gcloud artifacts docker images delete $image_id --async --quiet --delete-tags)
                 fi
                 deleted_count=$(( deleted_count+1 ))
                 echo "Marked for deletion: $image_id"
