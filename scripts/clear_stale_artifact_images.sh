@@ -11,9 +11,10 @@
 #           clear_stale_artifact_images.sh 0 (for an actual run)
 #
 
-# Variables
+# Input Arguments
 dry_run=$1 # 0=false (submit deletion requests), 1=true (don't perform any deletions)
 
+# Variables
 image_limit_per_service=2
 
 previous_image_name=""
