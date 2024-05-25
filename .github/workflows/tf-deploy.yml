@@ -9,7 +9,7 @@ on:
       - 'README.md'
       - '.gitignore'
       - 'cloud-sql/migrations/**'
-
+      
   workflow_dispatch:
 
 env:
