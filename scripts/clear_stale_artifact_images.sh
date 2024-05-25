@@ -6,9 +6,9 @@
 #
 
 # Variables
-dry_run=1 # 0=false (submit deletion requests), 1=true (don't perform any deletions)
+dry_run=0 # 0=false (submit deletion requests), 1=true (don't perform any deletions)
 
-image_limit_per_service=1
+image_limit_per_service=2
 
 previous_image_name=""
 current_image_name=""
@@ -28,6 +28,7 @@ artifact_registry_result_lines=$(gcloud artifacts docker images list europe-west
 
 current_header_count=0
 while read line; do
+
     # Skip over header lines
     if (( current_header_count < 1 )); then
         current_header_count=$(( current_header_count+1 ))
@@ -35,18 +36,20 @@ while read line; do
     fi
 
     #
-    # Now, each line is a published image containing the 4 metadata fields
+    # Now, each line of text contains data about a published Docker image (i.e the 4 returned data fields per row)
     #
 
-    # Tokenise the line by whitespace to separate the Docker image data
+    # Tokenise the line by whitespace to separate the Docker image data on the input line
     read -ra image_metadata -d '' <<< "$line"
 
     # Capture the specific metadata values
     image_name=${image_metadata[0]}
     digest=${image_metadata[1]}
-    created_at=${image_metadata[2]}
-    updated_at=${image_metadata[3]}
+    # created_at=${image_metadata[2]}
+    # updated_at=${image_metadata[3]}
 
+    # Image names tend to be grouped in the responses from GCP (i.e similar names come one after the other)
+    # so it makes sense to 
     current_image_name=$image_name
 
     # If a previous image name exists
