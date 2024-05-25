@@ -1,12 +1,18 @@
 #
 # Shared Script - GCP Artifact Registry Docker Image Cleaner
 #
-# RULE: Delete all unnecessary images such that for each image name there are at most 2-3 images stored at all times, 
+# RULE
+# Delete all unnecessary images such that for each image name there are at most 2-3 images stored at all times, 
 # thus allowing rolling back at least 2-3 versions if needed.
+#
+# USAGE
+# Run clear_stale_artifact_images.sh <ARG_DRY_RUN>
+# Examples: clear_stale_artifact_images.sh 1 (for a dry-run)
+#           clear_stale_artifact_images.sh 0 (for an actual run)
 #
 
 # Variables
-dry_run=0 # 0=false (submit deletion requests), 1=true (don't perform any deletions)
+dry_run=$1 # 0=false (submit deletion requests), 1=true (don't perform any deletions)
 
 image_limit_per_service=2
 
