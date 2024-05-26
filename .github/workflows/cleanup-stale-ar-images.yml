@@ -16,11 +16,8 @@ env:
 
 jobs:
 
-  continuous-delivery:
-    environment: production
-    needs: [continuous-integration]
+  run-script:
     runs-on: ubuntu-latest
-    if: needs.continuous-integration.result == 'success'
 
     steps:
       - uses: actions/checkout@v4
