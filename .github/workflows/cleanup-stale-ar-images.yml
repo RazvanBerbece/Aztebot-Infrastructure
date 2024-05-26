@@ -30,6 +30,7 @@ jobs:
         name: 'Authenticate to Google Cloud'
         uses: 'google-github-actions/auth@v1'
         with:
+          project_id: ${{ secrets.GC_PROJECT_ID }}
           token_format: 'access_token'
           create_credentials_file: true
           workload_identity_provider: ${{ secrets.GCP_GITHUB_WIP }}
