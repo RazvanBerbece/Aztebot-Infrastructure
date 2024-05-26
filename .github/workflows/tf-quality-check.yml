@@ -1,4 +1,4 @@
-name: tf-quality-check
+name: Run Quality Check on Terraform Code
 
 on:
   pull_request:

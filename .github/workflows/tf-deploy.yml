@@ -1,4 +1,4 @@
-name: tf-deploy
+name: Deploy Terraform Infrastructure
 
 on:
   push:

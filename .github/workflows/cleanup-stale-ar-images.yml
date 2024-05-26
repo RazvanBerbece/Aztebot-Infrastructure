@@ -1,6 +1,6 @@
 # Dispatchable workflow that can be run to cleanup stale images from the GCP Artifact Registry.
 
-name: cleanup-stale-ar-images
+name: Cleanup Stale GCP Artifact Registry Images
 
 on:
   workflow_dispatch:
