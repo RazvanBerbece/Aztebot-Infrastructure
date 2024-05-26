@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
     inputs:
       dryRun:
-        description: 'Whether the cleanup script will only perform a dry-run (i.e no images will be deleted) [ 1 = dry-run (T), 0 = actual run (F) ]'     
+        description: 'Dry Run Flag (1 = true, 0 = false)'     
         required: true
         default: '1'
 
