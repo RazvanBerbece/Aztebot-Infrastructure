@@ -8,7 +8,7 @@
 # thus allowing rolling back at least 2-3 versions if needed.
 #
 # USAGE
-# Run clear_stale_artifact_images.sh <ARG_DRY_RUN>
+# Run clear_stale_artifact_images.sh <ARG_DRY_RUN> <ARG_REPOSITORY_ADDRESS>
 # Examples: clear_stale_artifact_images.sh 1 us-na1-docker.pkg.dev/DummyProject-420/my-ar (for a dry-run)
 #           clear_stale_artifact_images.sh 0 us-na1-docker.pkg.dev/DummyProject-420/my-ar (for an actual run)
 #
