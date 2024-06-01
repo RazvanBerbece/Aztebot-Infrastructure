@@ -16,6 +16,9 @@ import (
 
 func main() {
 
+	// Load input arguments
+	direction := os.Args[1]
+
 	godotenv.Load()
 
 	dbConnString := os.Getenv("DB_ROOT_CONNSTRING")
@@ -27,25 +30,37 @@ func main() {
 	}
 
 	if env == "stg" {
-		// Running migration locally (in containerised mysql instance)
+
+		// Running migrations locally (i.e containerised mysql instance)
 		db, err := sql.Open("mysql", dbConnString)
 		if err != nil {
 			log.Fatalf("Error occured while connecting to database for migration: %s", err)
 		}
 
-		n, err := migrate.Exec(db, "mysql", migrations, migrate.Up)
-		if err != nil {
-			log.Fatalf("Error occured while running UP migrations: %s", err)
-		}
+		if direction == "UP" || len(os.Args) == 0 {
+			n, err := migrate.Exec(db, "mysql", migrations, migrate.Up)
+			if err != nil {
+				log.Fatalf("Error occured while running UP migrations: %s", err)
+			}
 
-		fmt.Printf("Applied %d migrations to local database!\n", n)
+			fmt.Printf("Applied %d migrations to local database!\n", n)
+		} else if direction == "DOWN" {
+			n, err := migrate.ExecMax(db, "mysql", migrations, migrate.Down, 1)
+			if err != nil {
+				log.Fatalf("Error occured while running DOWN migration: %s", err)
+			}
+
+			fmt.Printf("Rolled back %d migration(s).\n", n)
+		} else {
+			log.Fatalf("Migration direction %s not supported.", direction)
+		}
 	} else {
-		// Running migration in the Google Cloud SQL instance -- use proxy
+
+		// Running migrations in the Google Cloud SQL instance through proxy
 		cleanup, err := mysql.RegisterDriver("cloudsql-mysql", cloudsqlconn.WithCredentialsFile("../../keys/sa.db.json"))
 		if err != nil {
 			log.Fatalf("Error occured while registering driver for GC SQL: %s", err)
 		}
-		// call cleanup when you're done with the database connection
 		defer cleanup()
 
 		db, err := sql.Open(
@@ -56,12 +71,23 @@ func main() {
 			log.Fatalf("Error occured while connecting to Cloud SQL Instance: %s", err)
 		}
 
-		n, err := migrate.Exec(db, "mysql", migrations, migrate.Up)
-		if err != nil {
-			log.Fatalf("Error occured while running UP migrations: %s", err)
-		}
+		if direction == "UP" || len(os.Args) == 0 {
+			n, err := migrate.Exec(db, "mysql", migrations, migrate.Up)
+			if err != nil {
+				log.Fatalf("Error occured while running UP migrations: %s", err)
+			}
 
-		fmt.Printf("Applied %d migrations to Cloud SQL database!\n", n)
+			fmt.Printf("Applied %d migrations to Cloud SQL database!\n", n)
+		} else if direction == "DOWN" {
+			n, err := migrate.ExecMax(db, "mysql", migrations, migrate.Down, 1)
+			if err != nil {
+				log.Fatalf("Error occured while running DOWN migration: %s", err)
+			}
+
+			fmt.Printf("Rolled back %d migration(s) on the Cloud SQL database.\n", n)
+		} else {
+			log.Fatalf("Migration direction %s not supported.", direction)
+		}
 	}
 
 }
