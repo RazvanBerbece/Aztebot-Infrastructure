@@ -2,6 +2,11 @@ name: Rollback Latest DB Migration
 
 on:
   workflow_dispatch:
+    inputs:
+      dbNames:
+        description: 'DBs to rollback (e.g. "aztebot,aztemarket" etc.)'     
+        required: true
+        default: 'aztebot,'
 
 jobs:
 
@@ -44,4 +49,4 @@ jobs:
 
       - name: Run migration rollback
         working-directory: ./cloud-sql/migrations
-        run: go run main.go DOWN
+        run: go run . DOWN ${{ github.event.inputs.dbNames }}

@@ -49,4 +49,4 @@ jobs:
 
       - name: Run migrations up
         working-directory: ./cloud-sql/migrations
-        run: go run main.go UP
+        run: go run . UP aztebot,aztemarket
