@@ -2,7 +2,7 @@ locals {
   authorized_cidr = ["92.31.110.150"]
 }
 
-### SQL Cloud Instance and SQL Users
+### SQL Cloud instance and SQL Users
 
 resource "google_sql_database_instance" "main" {
   name             = var.sql_database_instance_name
