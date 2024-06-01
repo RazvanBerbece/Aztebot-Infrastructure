@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"strings"
 
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/joho/godotenv"
@@ -18,39 +19,73 @@ func main() {
 
 	// Load input arguments
 	direction := os.Args[1]
+	dbNames := os.Args[2]
 
 	godotenv.Load()
 
-	dbConnString := os.Getenv("DB_ROOT_CONNSTRING")
-	cloudDbConnString := os.Getenv("DB_ROOT_CLOUDSQL_CONNSTRING")
 	env := os.Getenv("ENVIRONMENT")
 
-	migrations := &migrate.FileMigrationSource{
-		Dir: "history",
+	// Local environment connection strings
+	aztebotDbConnString := os.Getenv("AZTEBOT_ROOT_CONNSTRING")
+	aztemarketDbConnString := os.Getenv("AZTEMARKET_ROOT_CONNSTRING")
+
+	// Cloud environment connection strings
+	cloudDbConnString := os.Getenv("DB_ROOT_CLOUDSQL_CONNSTRING")
+
+	migrationTargets := []DbMigrationTarget{
+		{
+			ConnString: aztebotDbConnString,
+			Fms: &migrate.FileMigrationSource{
+				Dir: "history/aztebot",
+			},
+		},
+		{
+			ConnString: aztemarketDbConnString,
+			Fms: &migrate.FileMigrationSource{
+				Dir: "history/aztemarket",
+			},
+		},
 	}
 
 	if env == "stg" {
 
 		// Running migrations locally (i.e containerised mysql instance)
-		db, err := sql.Open("mysql", dbConnString)
-		if err != nil {
-			log.Fatalf("Error occured while connecting to database for migration: %s", err)
-		}
-
 		if direction == "UP" || len(os.Args) == 0 {
-			n, err := migrate.Exec(db, "mysql", migrations, migrate.Up)
-			if err != nil {
-				log.Fatalf("Error occured while running UP migrations: %s", err)
-			}
+			for _, migrationTarget := range migrationTargets {
+				srcDbName := migrationTarget.Fms.Dir[8:]
+				if strings.Contains(dbNames, srcDbName) {
 
-			fmt.Printf("Applied %d migrations to local database!\n", n)
+					db, err := sql.Open("mysql", migrationTarget.ConnString)
+					if err != nil {
+						log.Fatalf("Error occured while connecting to database for migration: %s", err)
+					}
+
+					n, err := migrate.Exec(db, "mysql", migrationTarget.Fms, migrate.Up)
+					if err != nil {
+						log.Fatalf("Error occured while running UP migrationTargets: %s", err)
+					}
+
+					fmt.Printf("Applied %d migrations to local %s database!\n", n, srcDbName)
+				}
+			}
 		} else if direction == "DOWN" {
-			n, err := migrate.ExecMax(db, "mysql", migrations, migrate.Down, 1)
-			if err != nil {
-				log.Fatalf("Error occured while running DOWN migration: %s", err)
-			}
+			for _, migrationTarget := range migrationTargets {
+				srcDbName := migrationTarget.Fms.Dir[8:]
+				if strings.Contains(dbNames, srcDbName) {
 
-			fmt.Printf("Rolled back %d migration(s).\n", n)
+					db, err := sql.Open("mysql", migrationTarget.ConnString)
+					if err != nil {
+						log.Fatalf("Error occured while connecting to database for migration: %s", err)
+					}
+
+					n, err := migrate.ExecMax(db, "mysql", migrationTarget.Fms, migrate.Down, 1)
+					if err != nil {
+						log.Fatalf("Error occured while running DOWN migration: %s", err)
+					}
+
+					fmt.Printf("Rolled back %d migration(s) in local database %s.\n", n, srcDbName)
+				}
+			}
 		} else {
 			log.Fatalf("Migration direction %s not supported.", direction)
 		}
@@ -63,28 +98,48 @@ func main() {
 		}
 		defer cleanup()
 
-		db, err := sql.Open(
-			"cloudsql-mysql",
-			cloudDbConnString,
-		)
-		if err != nil {
-			log.Fatalf("Error occured while connecting to Cloud SQL Instance: %s", err)
-		}
-
 		if direction == "UP" || len(os.Args) == 0 {
-			n, err := migrate.Exec(db, "mysql", migrations, migrate.Up)
-			if err != nil {
-				log.Fatalf("Error occured while running UP migrations: %s", err)
-			}
+			for _, migrationTarget := range migrationTargets {
+				srcDbName := migrationTarget.Fms.Dir[8:]
+				if strings.Contains(dbNames, srcDbName) {
 
-			fmt.Printf("Applied %d migrations to Cloud SQL database!\n", n)
+					db, err := sql.Open(
+						"cloudsql-mysql",
+						cloudDbConnString,
+					)
+					if err != nil {
+						log.Fatalf("Error occured while connecting to Cloud SQL Instance: %s", err)
+					}
+
+					n, err := migrate.Exec(db, "mysql", migrationTarget.Fms, migrate.Up)
+					if err != nil {
+						log.Fatalf("Error occured while running UP migrationTargets: %s", err)
+					}
+
+					fmt.Printf("Applied %d migrations to Cloud SQL database %s!\n", n, srcDbName)
+				}
+			}
 		} else if direction == "DOWN" {
-			n, err := migrate.ExecMax(db, "mysql", migrations, migrate.Down, 1)
-			if err != nil {
-				log.Fatalf("Error occured while running DOWN migration: %s", err)
-			}
+			for _, migrationTarget := range migrationTargets {
+				srcDbName := migrationTarget.Fms.Dir[8:]
+				if strings.Contains(dbNames, srcDbName) {
 
-			fmt.Printf("Rolled back %d migration(s) on the Cloud SQL database.\n", n)
+					db, err := sql.Open(
+						"cloudsql-mysql",
+						cloudDbConnString,
+					)
+					if err != nil {
+						log.Fatalf("Error occured while connecting to Cloud SQL Instance: %s", err)
+					}
+
+					n, err := migrate.ExecMax(db, "mysql", migrationTarget.Fms, migrate.Down, 1)
+					if err != nil {
+						log.Fatalf("Error occured while running DOWN migration: %s", err)
+					}
+
+					fmt.Printf("Rolled back %d migration(s) in the Cloud SQL database %s.\n", n, srcDbName)
+				}
+			}
 		} else {
 			log.Fatalf("Migration direction %s not supported.", direction)
 		}
