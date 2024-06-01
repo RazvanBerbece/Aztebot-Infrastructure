@@ -62,7 +62,7 @@ resource "google_sql_database" "aztebot-bot-db" {
   instance = google_sql_database_instance.main.name
 }
 
-# resource "google_sql_database" "aztemarket-db" {
-#   name     = "azteMarketDb"
-#   instance = google_sql_database_instance.main.name
-# }
+resource "google_sql_database" "aztemarket-db" {
+  name     = "azteMarketDb"
+  instance = google_sql_database_instance.main.name
+}

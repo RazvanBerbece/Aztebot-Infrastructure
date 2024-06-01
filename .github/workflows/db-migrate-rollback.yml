@@ -1,11 +1,6 @@
 name: Rollback Latest DB Migration
 
 on:
-  push:
-    branches: [ 'main' ]
-    paths:
-      - cloud-sql/migrations/**
-
   workflow_dispatch:
 
 jobs:
