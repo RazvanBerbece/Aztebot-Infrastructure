@@ -41,3 +41,4 @@ keys/
 .prod.env
 .output.env
 scripts/export_sp.sh
+cloud-sql/migrations/main

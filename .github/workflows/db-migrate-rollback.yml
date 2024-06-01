@@ -1,0 +1,52 @@
+name: Rollback Latest DB Migration
+
+on:
+  push:
+    branches: [ 'main' ]
+    paths:
+      - cloud-sql/migrations/**
+
+  workflow_dispatch:
+
+jobs:
+
+  rollback:
+
+    name: Migrate Down
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        go-version: [ '1.22' ]
+
+    steps:
+
+      - uses: actions/checkout@v2
+
+      - name: Setup environment
+        working-directory: ./cloud-sql/migrations
+        run: |
+          touch .env
+          echo ${{ secrets.ENV_BASE64 }} | base64 --decode > .env
+
+          mkdir ../../keys
+          touch ../../keys/sa.json
+          echo ${{ secrets.GC_SERVICE_ACCOUNT_BASE64 }} | base64 --decode > ../../keys/sa.json
+          touch ../../keys/sa.db.json
+          echo ${{ secrets.GC_DB_MANAGER_SERVICE_ACCOUNT_BASE64 }} | base64 --decode > ../../keys/sa.db.json
+
+      - name: Setup Go ${{ matrix.go-version }}
+        uses: actions/setup-go@v4
+        with:
+          go-version: ${{ matrix.go-version }}
+      
+      - name: Display Go version
+        run: go version
+
+      - name: Install Go dependencies
+        working-directory: ./cloud-sql/migrations
+        run: |
+          go get .
+
+      - name: Run migration rollback
+        working-directory: ./cloud-sql/migrations
+        run: go run main.go DOWN
