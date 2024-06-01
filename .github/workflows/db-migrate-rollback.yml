@@ -1,4 +1,4 @@
-name: Rollback Last DB Migration
+name: Rollback Latest DB Migration
 
 on:
   push:
