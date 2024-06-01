@@ -30,17 +30,20 @@ func main() {
 	aztemarketDbConnString := os.Getenv("AZTEMARKET_ROOT_CONNSTRING")
 
 	// Cloud environment connection strings
-	cloudDbConnString := os.Getenv("DB_ROOT_CLOUDSQL_CONNSTRING")
+	aztebotCloudDbConnString := os.Getenv("AZTEBOT_ROOT_CLOUDSQL_CONNSTRING")
+	aztemarketCloudDbConnString := os.Getenv("AZTEMARKET_ROOT_CLOUDSQL_CONNSTRING")
 
 	migrationTargets := []DbMigrationTarget{
 		{
-			ConnString: aztebotDbConnString,
+			DevConnString:  aztebotDbConnString,
+			ProdConnString: aztebotCloudDbConnString,
 			Fms: &migrate.FileMigrationSource{
 				Dir: "history/aztebot",
 			},
 		},
 		{
-			ConnString: aztemarketDbConnString,
+			DevConnString:  aztemarketDbConnString,
+			ProdConnString: aztemarketCloudDbConnString,
 			Fms: &migrate.FileMigrationSource{
 				Dir: "history/aztemarket",
 			},
@@ -55,7 +58,7 @@ func main() {
 				srcDbName := migrationTarget.Fms.Dir[8:]
 				if strings.Contains(dbNames, srcDbName) {
 
-					db, err := sql.Open("mysql", migrationTarget.ConnString)
+					db, err := sql.Open("mysql", migrationTarget.DevConnString)
 					if err != nil {
 						log.Fatalf("Error occured while connecting to database for migration: %s", err)
 					}
@@ -73,7 +76,7 @@ func main() {
 				srcDbName := migrationTarget.Fms.Dir[8:]
 				if strings.Contains(dbNames, srcDbName) {
 
-					db, err := sql.Open("mysql", migrationTarget.ConnString)
+					db, err := sql.Open("mysql", migrationTarget.DevConnString)
 					if err != nil {
 						log.Fatalf("Error occured while connecting to database for migration: %s", err)
 					}
@@ -105,7 +108,7 @@ func main() {
 
 					db, err := sql.Open(
 						"cloudsql-mysql",
-						cloudDbConnString,
+						migrationTarget.ProdConnString,
 					)
 					if err != nil {
 						log.Fatalf("Error occured while connecting to Cloud SQL Instance: %s", err)
@@ -126,7 +129,7 @@ func main() {
 
 					db, err := sql.Open(
 						"cloudsql-mysql",
-						cloudDbConnString,
+						migrationTarget.ProdConnString,
 					)
 					if err != nil {
 						log.Fatalf("Error occured while connecting to Cloud SQL Instance: %s", err)
