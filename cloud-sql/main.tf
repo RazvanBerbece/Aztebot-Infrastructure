@@ -1,8 +1,7 @@
-locals {
-  authorized_cidr = ["92.16.126.186"]
+resource "random_password" "sql_user_password" {
+  length  = 16
+  special = true
 }
-
-### SQL Cloud instance and SQL Users
 
 resource "google_sql_database_instance" "main" {
   name             = var.sql_database_instance_name
@@ -17,7 +16,7 @@ resource "google_sql_database_instance" "main" {
 
       // Allow these external networks to connect to the DB
       dynamic "authorized_networks" {
-        for_each = local.authorized_cidr
+        for_each = var.sql_authorised_cidr
         iterator = authorized_cidr
 
         content {
@@ -45,9 +44,9 @@ resource "google_sql_database_instance" "main" {
 }
 
 resource "google_sql_user" "sql_user" {
-  name     = var.SQL_USER_NAME
+  name     = var.sql_user_name
   instance = google_sql_database_instance.main.name
-  password = var.SQL_USER_PASS
+  password = random_password.sql_user_password.result
 }
 
 resource "google_sql_user" "iam_db_manager_service_account_user" {
