@@ -1,3 +1,8 @@
+resource "random_password" "sql_user_password" {
+  length  = 16
+  special = true
+}
+
 resource "google_sql_database_instance" "main" {
   name             = var.sql_database_instance_name
   database_version = var.sql_database_version
@@ -41,7 +46,7 @@ resource "google_sql_database_instance" "main" {
 resource "google_sql_user" "sql_user" {
   name     = var.sql_user_name
   instance = google_sql_database_instance.main.name
-  password = var.sql_user_password
+  password = random_password.sql_user_password.result
 }
 
 resource "google_sql_user" "iam_db_manager_service_account_user" {

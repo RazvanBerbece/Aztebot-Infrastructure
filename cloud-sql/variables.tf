@@ -40,13 +40,6 @@ variable "sql_user_name" {
   default     = "aztebotservice"
 }
 
-variable "sql_user_password" {
-  description = "SQL user password"
-  type        = string
-  sensitive   = true
-  default     = "51CcfnIzybe2F09ZPfe6lS3U0iZCeBUtjhP"
-}
-
 variable "sql_authorised_cidr" {
   type        = list(string)
   description = "IPv4 CIDRs to allow to connect to the DB publicly"
