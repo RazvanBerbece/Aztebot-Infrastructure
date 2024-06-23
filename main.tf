@@ -54,6 +54,8 @@ module "cloud_sql_instance" {
   project_id                 = "aztebot-403621"
   db_manager_sa_email        = module.auth.sa_db_manager_email
 
+  sql_authorised_cidr = var.sql_authorised_cidr
+
   depends_on = [
     module.aztebot_network
   ]

@@ -1,17 +1,12 @@
 resource "google_project_service" "apis" {
   for_each = toset([
     "artifactregistry.googleapis.com",
-    "autoscaling.googleapis.com",
-    "bigquery.googleapis.com",
-    "bigquerymigration.googleapis.com",
-    "bigquerystorage.googleapis.com",
     "cloudapis.googleapis.com",
     "cloudresourcemanager.googleapis.com",
     "cloudtrace.googleapis.com",
     "compute.googleapis.com",
     "container.googleapis.com",
     "containerfilesystem.googleapis.com",
-    "datastore.googleapis.com",
     "dns.googleapis.com",
     "iam.googleapis.com",
     "iamcredentials.googleapis.com",
@@ -32,5 +27,5 @@ resource "google_project_service" "apis" {
   ])
 
   service            = each.value
-  disable_on_destroy = false
+  disable_on_destroy = true
 }
