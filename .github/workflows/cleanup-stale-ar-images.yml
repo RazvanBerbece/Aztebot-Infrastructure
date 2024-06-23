@@ -28,7 +28,7 @@ jobs:
       
       - id: 'auth'
         name: 'Authenticate to Google Cloud'
-        uses: 'google-github-actions/auth@v1'
+        uses: 'google-github-actions/auth@v2'
         with:
           project_id: ${{ secrets.GC_PROJECT_ID }}
           token_format: 'access_token'
@@ -37,7 +37,7 @@ jobs:
           service_account: ${{ secrets.GC_AR_SERVICE_ACCOUNT }}
           access_token_lifetime: '60s'
       
-      - uses: 'docker/login-action@v1'
+      - uses: 'docker/login-action@v3'
         name: 'Docker login'
         with:
           registry: '${{ env.GKE_REGION }}-docker.pkg.dev'
