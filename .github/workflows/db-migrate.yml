@@ -20,7 +20,7 @@ jobs:
 
     steps:
 
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
       - name: Setup environment
         working-directory: ./cloud-sql/migrations
@@ -35,7 +35,7 @@ jobs:
           echo ${{ secrets.GC_DB_MANAGER_SERVICE_ACCOUNT_BASE64 }} | base64 --decode > ../../keys/sa.db.json
 
       - name: Setup Go ${{ matrix.go-version }}
-        uses: actions/setup-go@v4
+        uses: actions/setup-go@v5
         with:
           go-version: ${{ matrix.go-version }}
       
