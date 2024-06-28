@@ -23,7 +23,7 @@ jobs:
 
     steps:
 
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4.1.7
 
       - name: Setup Environment
         run: |
@@ -31,7 +31,7 @@ jobs:
           echo "${{ secrets.GC_SERVICE_ACCOUNT_BASE64 }}" | base64 --decode | jq > keys/sa.json
 
       - name: Install Terraform
-        uses: hashicorp/setup-terraform@v3
+        uses: hashicorp/setup-terraform@v3.1.1
 
       - name: Run 'terraform fmt'
         id: fmt
@@ -54,7 +54,7 @@ jobs:
       # On PR events, comment on the PR with the TF step statuses
       # The always() allows this step to run regardless of whether the steps above failed, as we want to see which stage failed
       - name: Update PR with Terraform quality step outputs
-        uses: actions/github-script@0.9.0
+        uses: actions/github-script@v7.0.1
         if: github.event_name == 'pull_request' && always()
         with:
           github-token: ${{ secrets.GH_TOKEN }}
