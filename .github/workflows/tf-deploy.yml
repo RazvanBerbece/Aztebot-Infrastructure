@@ -31,7 +31,7 @@ jobs:
     if: needs.continuous-integration.result == 'success'
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4.1.7
 
       - name: Generate next release number
         id: tag_version
@@ -47,7 +47,7 @@ jobs:
           echo "${{ secrets.GC_SERVICE_ACCOUNT_BASE64 }}" | base64 --decode | jq > keys/sa.json
       
       - name: Install Terraform
-        uses: hashicorp/setup-terraform@v3
+        uses: hashicorp/setup-terraform@v3.1.1
         
       - name: Run 'terraform init'
         run: |
@@ -58,7 +58,7 @@ jobs:
           terraform apply -input=false -auto-approve
       
       - name: Create GitHub release
-        uses: ncipollo/release-action@v1
+        uses: ncipollo/release-action@v1.14.0
         with:
           token: ${{ secrets.GH_TOKEN }}
           tag: ${{ steps.tag_version.outputs.new_tag }}
