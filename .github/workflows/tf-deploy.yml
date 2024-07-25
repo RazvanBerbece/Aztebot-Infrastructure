@@ -37,7 +37,7 @@ jobs:
         id: tag_version
         uses: mathieudutour/github-tag-action@v6.2
         with:
-          github_token: ${{ secrets.GH_TOKEN }}
+          github_token: ${{ secrets.INTEGRATIONS_PAT }}
           default_bump: major
           dry_run: true
       
@@ -60,7 +60,7 @@ jobs:
       - name: Create GitHub release
         uses: ncipollo/release-action@v1.14.0
         with:
-          token: ${{ secrets.GH_TOKEN }}
+          token: ${{ secrets.INTEGRATIONS_PAT }}
           tag: ${{ steps.tag_version.outputs.new_tag }}
           name: Release ${{ steps.tag_version.outputs.new_tag }}
           body: ${{ steps.tag_version.outputs.changelog }}
