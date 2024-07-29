@@ -3,5 +3,8 @@ MySQL DB migrations for this project are done through `golang-migrate`. The `his
 
 # How to Run a Migration
 1. Make sure you have the `github.com/golang-migrate/migrate/v4` Golang package in your GOROOT.
-2. 
-_Expected URL: `mysql://user:password@tcp(host:port)/dbname?query`_
+2. TODO
+3. TODO
+
+# Additional Notes
+- _Expected connection string format: `mysql://user:password@tcp(host:port)/dbname?query`_
