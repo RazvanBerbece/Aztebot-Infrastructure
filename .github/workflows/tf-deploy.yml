@@ -16,7 +16,7 @@ on:
 env:
   TF_IN_AUTOMATION: "1"
   GOOGLE_APPLICATION_CREDENTIALS: "./keys/sa.json"
-  TF_VAR_sql_authorised_cidr: ${{ secrets.GC_SQL_INSTANCE_CIDR_LIST }}
+  TF_VAR_sql_authorised_cidr: ${{ secrets.GC_SQL_INSTANCE_CIDR_LIST }} // e.g. ["12.34.56.7"]
 
 jobs:
 
