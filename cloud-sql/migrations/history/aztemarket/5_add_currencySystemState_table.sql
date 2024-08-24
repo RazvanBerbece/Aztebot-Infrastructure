@@ -1,6 +1,8 @@
 -- +migrate Up
 USE azteMarketDb;
 
+ALTER DATABASE azteMarketDb CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
+
 CREATE TABLE IF NOT EXISTS CurrencySystemState (
   guildId                 VARCHAR(255) NOT NULL,
   currencyName            VARCHAR(255) NOT NULL,
