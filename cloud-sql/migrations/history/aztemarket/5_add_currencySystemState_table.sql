@@ -14,10 +14,5 @@ CREATE TABLE IF NOT EXISTS CurrencySystemState (
 
 ALTER TABLE CurrencySystemState CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
-INSERT INTO CurrencySystemState
-  (guildId, currencyName, totalCurrencyAvailable, totalCurrencyInFlow, dateOfLastReplenish)
-VALUES
-  ("1099254930075832330", "AzteCoin 🪙", 5000000, NULL, 1724512894);
-
 -- +migrate Down
 DROP TABLE IF EXISTS CurrencySystemState;
